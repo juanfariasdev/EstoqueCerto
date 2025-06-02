@@ -22,6 +22,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format, parseISO, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { DateRange } from 'react-day-picker';
+import { Badge } from '@/components/ui/badge';
 
 export default function MovementReportPage() {
   const { movements, products } = useStock();
