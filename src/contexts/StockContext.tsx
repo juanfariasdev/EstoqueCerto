@@ -8,6 +8,7 @@ interface StockContextType {
   products: Product[];
   movements: StockMovement[];
   addProduct: (product: Omit<Product, 'id' | 'currentStock'>) => Product;
+  updateProduct: (updatedProduct: Product) => void;
   addStockEntry: (productId: string, quantity: number) => void;
   addStockWithdrawal: (productId:string, quantity: number, reason: string) => void;
   getProductById: (id: string) => Product | undefined;
@@ -71,10 +72,16 @@ export const StockProvider = ({ children }: { children: ReactNode }) => {
     const newProduct: Product = {
       ...productData,
       id: Date.now().toString(), // simple unique ID
-      currentStock: 0,
+      currentStock: 0, // New products start with 0 stock
     };
     setProducts((prev) => [...prev, newProduct]);
     return newProduct;
+  };
+
+  const updateProduct = (updatedProduct: Product) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+    );
   };
 
   const getProductById = (id: string) => {
@@ -124,7 +131,7 @@ export const StockProvider = ({ children }: { children: ReactNode }) => {
   }
   
   return (
-    <StockContext.Provider value={{ products, movements, addProduct, addStockEntry, addStockWithdrawal, getProductById }}>
+    <StockContext.Provider value={{ products, movements, addProduct, updateProduct, addStockEntry, addStockWithdrawal, getProductById }}>
       {children}
     </StockContext.Provider>
   );

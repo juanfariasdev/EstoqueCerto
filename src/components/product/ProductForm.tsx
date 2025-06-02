@@ -18,17 +18,18 @@ const productSchema = z.object({
   description: z.string().min(1, { message: 'Descrição é obrigatória.' }),
   unit: z.string().optional(),
   minStockLevel: z.coerce.number().min(0, { message: 'Nível mínimo deve ser 0 ou maior.' }),
+  // currentStock is managed by movements, not directly in this form for new products or edits.
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
 
 interface ProductFormProps {
-  product?: Product;
+  product?: Product; // If product is provided, it's an edit
   onSuccess?: () => void;
 }
 
 export function ProductForm({ product, onSuccess }: ProductFormProps) {
-  const { addProduct } = useStock(); // Assuming updateProduct will be added to context
+  const { addProduct, updateProduct } = useStock();
   const { toast } = useToast();
 
   const form = useForm<ProductFormData>({
@@ -41,17 +42,39 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
     },
   });
 
+  // Reset form if product prop changes (e.g., from edit to new, or different product)
+  React.useEffect(() => {
+    if (product) {
+      form.reset({
+        name: product.name,
+        description: product.description,
+        unit: product.unit || '',
+        minStockLevel: product.minStockLevel,
+      });
+    } else {
+      form.reset({
+        name: '',
+        description: '',
+        unit: '',
+        minStockLevel: 0,
+      });
+    }
+  }, [product, form]);
+
+
   const onSubmit: SubmitHandler<ProductFormData> = (data) => {
     try {
       if (product) {
-        // Update logic will go here - not implemented in context yet
-        // updateProduct({ ...product, ...data });
+        // Update existing product
+        // Retain currentStock and id from the existing product object
+        updateProduct({ ...product, ...data });
         toast({ title: 'Sucesso!', description: 'Produto atualizado com sucesso.', className: 'bg-accent text-accent-foreground'});
       } else {
-        addProduct(data);
+        // Add new product
+        addProduct(data); // addProduct will assign id and initial currentStock (0)
         toast({ title: 'Sucesso!', description: 'Produto cadastrado com sucesso.', className: 'bg-accent text-accent-foreground'});
       }
-      form.reset();
+      // form.reset(); // Resetting here might clear the form before dialog close animation
       onSuccess?.();
     } catch (error) {
       toast({ variant: 'destructive', title: 'Erro!', description: 'Falha ao salvar produto.' });
