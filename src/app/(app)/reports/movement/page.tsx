@@ -13,54 +13,81 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStock } from '@/contexts/StockContext';
-import type { StockMovement } from '@/lib/types';
+import type { StockMovement, Product } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Download } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format, parseISO, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { DateRange } from 'react-day-picker';
 import { Badge } from '@/components/ui/badge';
+import { exportToCSV } from '@/lib/exportUtils';
 
-const ALL_PRODUCTS_VALUE = "all-products"; // Define a constant for clarity
+const ALL_PRODUCTS_VALUE = "all-products"; 
 
 export default function MovementReportPage() {
   const { movements, products } = useStock();
-  const [selectedProductId, setSelectedProductId] = useState<string>(''); // Initial empty string for placeholder
+  const [selectedProductId, setSelectedProductId] = useState<string>(ALL_PRODUCTS_VALUE); 
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   const filteredMovements = useMemo(() => {
     return movements
       .filter((movement) => {
-        // Product filter:
-        // Only apply product-specific filtering if selectedProductId is not empty AND not the "all products" value.
         if (selectedProductId && selectedProductId !== ALL_PRODUCTS_VALUE && movement.productId !== selectedProductId) {
           return false;
         }
         
-        // Date filter:
         if (dateRange?.from && parseISO(movement.date) < dateRange.from) {
           return false;
         }
-        if (dateRange?.to && parseISO(movement.date) > dateRange.to) {
-          return false;
+        if (dateRange?.to) {
+          // Adjust to include the whole 'to' day
+          const toDate = new Date(dateRange.to);
+          toDate.setHours(23, 59, 59, 999);
+          if (parseISO(movement.date) > toDate) {
+            return false;
+          }
         }
         return true;
       })
       .sort((a, b) => parseISO(b.date).getTime() - parseISO(a.date).getTime());
   }, [movements, selectedProductId, dateRange]);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, includeTime: boolean = true) => {
     const date = parseISO(dateString);
-    return isValid(date) ? format(date, 'dd/MM/yyyy HH:mm', { locale: ptBR }) : 'Data inválida';
+    if (!isValid(date)) return 'Data inválida';
+    return includeTime ? format(date, 'dd/MM/yyyy HH:mm', { locale: ptBR }) : format(date, 'dd/MM/yyyy', { locale: ptBR });
+  };
+
+  const getProductName = (productId: string): string => {
+    return products.find(p => p.id === productId)?.name || 'N/A (Produto Excluído)';
   };
   
+  const handleExport = () => {
+    const columns = [
+      { key: (item: StockMovement) => formatDate(item.date, true), label: 'Data' },
+      { key: (item: StockMovement) => item.productName || getProductName(item.productId), label: 'Produto' },
+      { key: (item: StockMovement) => item.type === 'entrada' ? 'Entrada' : 'Saída', label: 'Tipo' },
+      { key: 'quantity' as keyof StockMovement, label: 'Quantidade' },
+      { key: (item: StockMovement) => item.reason || '-', label: 'Motivo (Saída)' },
+    ];
+    exportToCSV(filteredMovements, columns, 'relatorio_movimentacoes');
+  };
+
   return (
     <div className="container mx-auto py-8">
-      <PageHeader title="Relatório Detalhado de Movimentação" />
+      <PageHeader 
+        title="Relatório Detalhado de Movimentação" 
+        actions={
+          <Button onClick={handleExport} variant="outline">
+            <Download className="mr-2 h-4 w-4" />
+            Exportar CSV
+          </Button>
+        }
+      />
 
       <Card className="mb-6">
         <CardHeader>
@@ -97,11 +124,11 @@ export default function MovementReportPage() {
                     {dateRange?.from ? (
                         dateRange.to ? (
                         <>
-                            {format(dateRange.from, "LLL dd, y", {locale: ptBR})} -{" "}
-                            {format(dateRange.to, "LLL dd, y", {locale: ptBR})}
+                            {format(dateRange.from, "dd/MM/yyyy", {locale: ptBR})} -{" "}
+                            {format(dateRange.to, "dd/MM/yyyy", {locale: ptBR})}
                         </>
                         ) : (
-                        format(dateRange.from, "LLL dd, y", {locale: ptBR})
+                        format(dateRange.from, "dd/MM/yyyy", {locale: ptBR})
                         )
                     ) : (
                         <span>Selecione um período</span>
@@ -121,7 +148,7 @@ export default function MovementReportPage() {
                 </PopoverContent>
             </Popover>
           </div>
-          <Button onClick={() => {setSelectedProductId(''); setDateRange(undefined)}} variant="outline" className="self-end">Limpar Filtros</Button>
+          <Button onClick={() => {setSelectedProductId(ALL_PRODUCTS_VALUE); setDateRange(undefined)}} variant="outline" className="self-end">Limpar Filtros</Button>
         </CardContent>
       </Card>
 
@@ -147,7 +174,7 @@ export default function MovementReportPage() {
                 {filteredMovements.map((movement) => (
                   <TableRow key={movement.id}>
                     <TableCell>{formatDate(movement.date)}</TableCell>
-                    <TableCell className="font-medium">{movement.productName || products.find(p => p.id === movement.productId)?.name || 'N/A'}</TableCell>
+                    <TableCell className="font-medium">{movement.productName || getProductName(movement.productId)}</TableCell>
                     <TableCell>
                       <Badge variant={movement.type === 'entrada' ? 'default' : 'secondary'} 
                              className={movement.type === 'entrada' ? 'bg-accent text-accent-foreground' : 'bg-orange-100 text-orange-700 border-orange-300'}>
@@ -166,4 +193,3 @@ export default function MovementReportPage() {
     </div>
   );
 }
-

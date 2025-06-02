@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -12,15 +13,36 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStock } from '@/contexts/StockContext';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { exportToCSV } from '@/lib/exportUtils';
+import type { Product } from '@/lib/types';
 
 export default function LowStockReportPage() {
   const { products } = useStock();
   const lowStockProducts = products.filter(p => p.currentStock < p.minStockLevel);
 
+  const handleExport = () => {
+    const columns = [
+      { key: 'name' as keyof Product, label: 'Produto' },
+      { key: 'currentStock' as keyof Product, label: 'Estoque Atual' },
+      { key: 'minStockLevel' as keyof Product, label: 'Estoque Mínimo' },
+      { key: (item: Product) => item.minStockLevel - item.currentStock, label: 'Necessário Repor' },
+    ];
+    exportToCSV(lowStockProducts, columns, 'relatorio_estoque_baixo');
+  };
+
   return (
     <div className="container mx-auto py-8">
-      <PageHeader title="Relatório de Produtos com Estoque Baixo" />
+      <PageHeader 
+        title="Relatório de Produtos com Estoque Baixo" 
+        actions={
+          <Button onClick={handleExport} variant="outline">
+            <Download className="mr-2 h-4 w-4" />
+            Exportar CSV
+          </Button>
+        }
+      />
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center">
