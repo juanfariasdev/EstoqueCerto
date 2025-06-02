@@ -1,3 +1,4 @@
+
 'use client';
 
 import PageHeader from '@/components/shared/PageHeader';
@@ -5,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStock } from '@/contexts/StockContext';
 import { AlertTriangle, Package, ArrowRightLeft } from 'lucide-react';
 import Link from 'next/link';
+import DashboardStatCard from '@/components/dashboard/DashboardStatCard';
 
 export default function DashboardPage() {
   const { products } = useStock();
@@ -16,48 +18,33 @@ export default function DashboardPage() {
     <div className="container mx-auto py-8">
       <PageHeader title="Painel - Estoque Certo" />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Produtos</CardTitle>
-            <Package className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalProducts}</div>
-            <p className="text-xs text-muted-foreground">Produtos cadastrados no sistema</p>
-            <Link href="/products" className="text-sm text-primary hover:underline mt-2 block">
-              Ver Produtos
-            </Link>
-          </CardContent>
-        </Card>
+        <DashboardStatCard
+          title="Total de Produtos"
+          value={totalProducts}
+          description="Produtos cadastrados no sistema"
+          icon={Package}
+          linkHref="/products"
+          linkText="Ver Produtos"
+        />
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Produtos com Estoque Baixo</CardTitle>
-            <AlertTriangle className="h-5 w-5 text-destructive" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{lowStockProducts}</div>
-            <p className="text-xs text-muted-foreground">Produtos abaixo do nível mínimo</p>
-            <Link href="/reports/low-stock" className="text-sm text-primary hover:underline mt-2 block">
-              Ver Relatório
-            </Link>
-          </CardContent>
-        </Card>
+        <DashboardStatCard
+          title="Produtos com Estoque Baixo"
+          value={lowStockProducts}
+          description="Produtos abaixo do nível mínimo"
+          icon={AlertTriangle}
+          iconClassName="text-destructive"
+          linkHref="/reports/low-stock"
+          linkText="Ver Relatório"
+        />
         
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Movimentações Recentes</CardTitle>
-            <ArrowRightLeft className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            {/* This could display a summary or link to the detailed report */}
-            <div className="text-2xl font-bold">-</div> 
-            <p className="text-xs text-muted-foreground">Nenhuma movimentação recente (mock)</p>
-            <Link href="/reports/movement" className="text-sm text-primary hover:underline mt-2 block">
-              Ver Detalhes
-            </Link>
-          </CardContent>
-        </Card>
+        <DashboardStatCard
+          title="Movimentações Recentes"
+          value="-" // Placeholder as per original
+          description="Nenhuma movimentação recente (mock)"
+          icon={ArrowRightLeft}
+          linkHref="/reports/movement"
+          linkText="Ver Detalhes"
+        />
       </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
