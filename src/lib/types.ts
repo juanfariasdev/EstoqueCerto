@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  unit?: string; // Ex: un, kg, L, pç
   minStockLevel: number;
   currentStock: number;
 }

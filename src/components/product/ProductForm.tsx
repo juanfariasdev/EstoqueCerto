@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 const productSchema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório.' }),
   description: z.string().min(1, { message: 'Descrição é obrigatória.' }),
+  unit: z.string().optional(),
   minStockLevel: z.coerce.number().min(0, { message: 'Nível mínimo deve ser 0 ou maior.' }),
 });
 
@@ -35,6 +36,7 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
     defaultValues: {
       name: product?.name || '',
       description: product?.description || '',
+      unit: product?.unit || '',
       minStockLevel: product?.minStockLevel || 0,
     },
   });
@@ -87,6 +89,19 @@ export function ProductForm({ product, onSuccess }: ProductFormProps) {
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
                   <Textarea placeholder="Ex: Parafuso de aço carbono M10x50mm" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="unit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Unidade de Medida (Opcional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: un, kg, L, pç" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

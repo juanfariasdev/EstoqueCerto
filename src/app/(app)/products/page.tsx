@@ -69,6 +69,7 @@ export default function ProductsPage() {
                 <TableRow>
                   <TableHead>Nome</TableHead>
                   <TableHead>Descrição</TableHead>
+                  <TableHead>Unidade</TableHead>
                   <TableHead className="text-right">Estoque Atual</TableHead>
                   <TableHead className="text-right">Estoque Mínimo</TableHead>
                   <TableHead className="text-center">Status</TableHead>
@@ -80,6 +81,7 @@ export default function ProductsPage() {
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
                     <TableCell className="text-muted-foreground max-w-xs truncate">{product.description}</TableCell>
+                    <TableCell className="text-muted-foreground">{product.unit || '-'}</TableCell>
                     <TableCell className="text-right">{product.currentStock}</TableCell>
                     <TableCell className="text-right">{product.minStockLevel}</TableCell>
                     <TableCell className="text-center">

@@ -16,10 +16,10 @@ interface StockContextType {
 const StockContext = createContext<StockContextType | undefined>(undefined);
 
 const initialProducts: Product[] = [
-  { id: '1', name: 'Parafuso Sextavado M10', description: 'Parafuso de aço carbono M10x50mm', minStockLevel: 50, currentStock: 120 },
-  { id: '2', name: 'Arruela Lisa M10', description: 'Arruela de pressão para parafuso M10', minStockLevel: 100, currentStock: 80 },
-  { id: '3', name: 'Porca Sextavada M10', description: 'Porca de aço M10', minStockLevel: 70, currentStock: 150 },
-  { id: '4', name: 'Óleo Lubrificante XPTO', description: 'Óleo multiuso para máquinas', minStockLevel: 10, currentStock: 5 },
+  { id: '1', name: 'Parafuso Sextavado M10', description: 'Parafuso de aço carbono M10x50mm', unit: 'un', minStockLevel: 50, currentStock: 120 },
+  { id: '2', name: 'Arruela Lisa M10', description: 'Arruela de pressão para parafuso M10', unit: 'un', minStockLevel: 100, currentStock: 80 },
+  { id: '3', name: 'Porca Sextavada M10', description: 'Porca de aço M10', unit: 'un', minStockLevel: 70, currentStock: 150 },
+  { id: '4', name: 'Óleo Lubrificante XPTO', description: 'Óleo multiuso para máquinas', unit: 'frasco', minStockLevel: 10, currentStock: 5 },
 ];
 
 const initialMovements: StockMovement[] = [
