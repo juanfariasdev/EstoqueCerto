@@ -8,25 +8,34 @@ body {
 
 @layer base {
   :root {
-    --background: 213 67% 94%; /* #E6F0F8 */
-    --foreground: 222 39% 20%; /* #1E293B */
-    --card: 213 67% 94%; /* Consistent with background */
+    --background: 208 100% 97%; /* #F0F8FF - Alice Blue */
+    --foreground: 222 39% 20%; /* #1E293B - Dark Blue/Gray */
+
+    --card: 208 100% 97%; /* Consistent with background */
     --card-foreground: 222 39% 20%;
-    --popover: 213 67% 94%;
+
+    --popover: 208 100% 97%; /* Consistent with background */
     --popover-foreground: 222 39% 20%;
-    --primary: 207 60% 61%; /* #60A3D9 */
+
+    --primary: 219 79% 66%; /* #6495ED - Cornflower Blue */
     --primary-foreground: 0 0% 100%; /* White for contrast */
-    --secondary: 210 40% 86%; /* Lighter shade of blue/gray */
+
+    --secondary: 208 60% 90%; /* #DCE9F7 - Light grayish blue, derived */
     --secondary-foreground: 222 39% 20%;
-    --muted: 210 40% 90%;
-    --muted-foreground: 222 30% 40%;
-    --accent: 145 63% 70%; /* #82E0AA */
+
+    --muted: 208 75% 95%; /* #EEF5FC - Very light blue, derived */
+    --muted-foreground: 222 30% 40%; /* #525C6B - Original muted fg, good contrast */
+
+    --accent: 203 92% 75%; /* #87CEFA - Light Sky Blue */
     --accent-foreground: 222 39% 20%; /* Darker color for text on accent */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 207 50% 80%; /* Adjusted for better visibility */
-    --input: 207 50% 88%; /* Adjusted for input fields */
-    --ring: 207 60% 61%; /* Primary color for focus rings */
+
+    --destructive: 0 84.2% 60.2%; /* Default ShadCN Red */
+    --destructive-foreground: 0 0% 98%; /* Default ShadCN Light text for destructive */
+
+    --border: 208 50% 88%; /* #D5E5F6 - Light blue gray, derived for visibility */
+    --input: 208 50% 90%; /* #DDE7F8 - Slightly lighter blue gray for input fields, derived */
+    --ring: 219 79% 66%; /* #6495ED - Cornflower Blue for focus rings (same as primary) */
+
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -35,54 +44,63 @@ body {
     --radius: 0.5rem;
 
     /* Sidebar specific theme variables, adjusted for new theme */
-    --sidebar-background: 207 50% 55%; /* Darker shade of primary for sidebar */
+    --sidebar-background: 219 70% 55%; /* #4B79D6 - Darker shade of new primary for sidebar */
     --sidebar-foreground: 0 0% 100%; /* White text on sidebar */
     --sidebar-primary: 0 0% 100%; /* White for active/primary items in sidebar */
-    --sidebar-primary-foreground: 207 60% 61%; /* Primary color for text on sidebar primary */
-    --sidebar-accent: 207 60% 70%; /* Lighter primary for hover/accent in sidebar */
+    --sidebar-primary-foreground: 219 79% 66%; /* New primary color for text on sidebar primary */
+    --sidebar-accent: 219 79% 75%; /* #8CAFF3 - Lighter new primary for hover/accent in sidebar */
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 207 50% 50%;
+    --sidebar-border: 219 70% 50%; /* #3E6AD0 - Darker version of new primary for sidebar border */
     --sidebar-ring: 0 0% 100%;
   }
 
   .dark {
-    /* Estoque Certo does not have a dark theme specified, 
-       but we keep the structure for consistency.
-       These are example dark theme values, can be adjusted if needed.
+    /* Estoque Certo does not have a dark theme specified,
+       These values are analogous to the new light theme for structural consistency.
     */
-    --background: 222 39% 10%; 
-    --foreground: 210 40% 98%;
-    --card: 222 39% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 39% 10%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 207 60% 61%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 145 63% 70%;
-    --accent-foreground: 222 39% 10%;
+    --background: 220 40% 10%; /* #0F131A - Dark Blue-Gray */
+    --foreground: 208 100% 97%; /* #F0F8FF - Alice Blue (as foreground) */
+
+    --card: 220 40% 10%;
+    --card-foreground: 208 100% 97%;
+
+    --popover: 220 40% 10%;
+    --popover-foreground: 208 100% 97%;
+
+    --primary: 219 79% 66%; /* #6495ED - Cornflower Blue (same as light) */
+    --primary-foreground: 0 0% 100%; /* White */
+
+    --secondary: 220 30% 20%; /* #29303D - Darker Blue-Gray */
+    --secondary-foreground: 208 100% 97%;
+
+    --muted: 220 25% 15%; /* #1E242E - Even Darker Blue-Gray */
+    --muted-foreground: 208 75% 70%; /* #A8C9EF - Lighter Alice Blue variant for muted fg */
+
+    --accent: 203 92% 75%; /* #87CEFA - Light Sky Blue (same as light) */
+    --accent-foreground: 222 39% 15%; /* #171C25 - Darker for contrast on light accent */
+
     --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 25%;
-    --input: 217 33% 25%;
-    --ring: 207 60% 61%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 30% 25%; /* #333C4D - Dark Blue-Gray border */
+    --input: 220 30% 25%; /* #333C4D - Dark Blue-Gray input */
+    --ring: 219 79% 66%; /* #6495ED - Cornflower Blue */
+
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --sidebar-background: 222 39% 12%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 207 60% 61%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 39% 20%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 39% 18%;
-    --sidebar-ring: 207 60% 61%;
+    /* Sidebar specific theme variables for dark mode */
+    --sidebar-background: 219 70% 25%; /* #1D335B - Dark desaturated Cornflower Blue */
+    --sidebar-foreground: 0 0% 100%; /* White */
+    --sidebar-primary: 219 79% 66%; /* Cornflower Blue (active item background) */
+    --sidebar-primary-foreground: 0 0% 100%; /* White (active item text) */
+    --sidebar-accent: 219 70% 35%; /* #2A4A87 - Slightly lighter dark Cornflower Blue (hover) */
+    --sidebar-accent-foreground: 0 0% 100%; /* White */
+    --sidebar-border: 219 70% 20%; /* #172949 - Even darker desaturated Cornflower Blue */
+    --sidebar-ring: 219 79% 66%; /* Cornflower Blue */
   }
 }
 
