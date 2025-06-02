@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -24,17 +25,23 @@ import { ptBR } from 'date-fns/locale';
 import type { DateRange } from 'react-day-picker';
 import { Badge } from '@/components/ui/badge';
 
+const ALL_PRODUCTS_VALUE = "all-products"; // Define a constant for clarity
+
 export default function MovementReportPage() {
   const { movements, products } = useStock();
-  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const [selectedProductId, setSelectedProductId] = useState<string>(''); // Initial empty string for placeholder
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   const filteredMovements = useMemo(() => {
     return movements
       .filter((movement) => {
-        if (selectedProductId && movement.productId !== selectedProductId) {
+        // Product filter:
+        // Only apply product-specific filtering if selectedProductId is not empty AND not the "all products" value.
+        if (selectedProductId && selectedProductId !== ALL_PRODUCTS_VALUE && movement.productId !== selectedProductId) {
           return false;
         }
+        
+        // Date filter:
         if (dateRange?.from && parseISO(movement.date) < dateRange.from) {
           return false;
         }
@@ -67,7 +74,7 @@ export default function MovementReportPage() {
                 <SelectValue placeholder="Todos os Produtos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os Produtos</SelectItem>
+                <SelectItem value={ALL_PRODUCTS_VALUE}>Todos os Produtos</SelectItem> 
                 {products.map((product) => (
                   <SelectItem key={product.id} value={product.id}>
                     {product.name}
@@ -159,3 +166,4 @@ export default function MovementReportPage() {
     </div>
   );
 }
+
