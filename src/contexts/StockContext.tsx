@@ -9,6 +9,7 @@ interface StockContextType {
   movements: StockMovement[];
   addProduct: (product: Omit<Product, 'id' | 'currentStock'>) => Product;
   updateProduct: (updatedProduct: Product) => void;
+  deleteProduct: (productId: string) => boolean; // Returns true if successful, false otherwise
   addStockEntry: (productId: string, quantity: number) => void;
   addStockWithdrawal: (productId:string, quantity: number, reason: string) => void;
   getProductById: (id: string) => Product | undefined;
@@ -21,6 +22,7 @@ const initialProducts: Product[] = [
   { id: '2', name: 'Arruela Lisa M10', description: 'Arruela de pressão para parafuso M10', unit: 'un', minStockLevel: 100, currentStock: 80 },
   { id: '3', name: 'Porca Sextavada M10', description: 'Porca de aço M10', unit: 'un', minStockLevel: 70, currentStock: 150 },
   { id: '4', name: 'Óleo Lubrificante XPTO', description: 'Óleo multiuso para máquinas', unit: 'frasco', minStockLevel: 10, currentStock: 5 },
+  { id: 'p0', name: 'Produto Teste Vazio', description: 'Produto para teste de exclusão', unit: 'un', minStockLevel: 10, currentStock: 0 },
 ];
 
 const initialMovements: StockMovement[] = [
@@ -84,6 +86,22 @@ export const StockProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const deleteProduct = (productId: string): boolean => {
+    const productToDelete = products.find(p => p.id === productId);
+    if (!productToDelete) {
+      console.warn(`Product with id ${productId} not found for deletion.`);
+      return false; // Product not found
+    }
+    if (productToDelete.currentStock > 0) {
+      console.warn(`Product with id ${productId} cannot be deleted as it has stock.`);
+      return false; // Product has stock
+    }
+    setProducts((prevProducts) => prevProducts.filter((p) => p.id !== productId));
+    // Optionally, filter movements related to this product if desired
+    // setMovements((prevMovements) => prevMovements.filter(m => m.productId !== productId));
+    return true;
+  };
+
   const getProductById = (id: string) => {
     return products.find(p => p.id === id);
   }
@@ -131,7 +149,7 @@ export const StockProvider = ({ children }: { children: ReactNode }) => {
   }
   
   return (
-    <StockContext.Provider value={{ products, movements, addProduct, updateProduct, addStockEntry, addStockWithdrawal, getProductById }}>
+    <StockContext.Provider value={{ products, movements, addProduct, updateProduct, deleteProduct, addStockEntry, addStockWithdrawal, getProductById }}>
       {children}
     </StockContext.Provider>
   );
