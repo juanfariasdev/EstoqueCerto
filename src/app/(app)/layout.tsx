@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -15,7 +16,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import AppLogo from '@/components/shared/AppLogo';
-import { LayoutDashboard, Package, ArrowRightLeft, FileText, AlertTriangle, History, PlusCircle, MinusCircle } from 'lucide-react';
+import { LayoutDashboard, Package, ArrowRightLeft, FileText, AlertTriangle, History, PlusCircle, MinusCircle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar'; // Import useSidebar
 
@@ -39,6 +40,7 @@ const navItems = [
       { href: '/reports/movement', label: 'Movimentações', icon: History },
     ],
   },
+  { href: '/sobre', label: 'Sobre', icon: Info },
 ];
 
 function MainSidebar() {
@@ -52,12 +54,12 @@ function MainSidebar() {
         <AppLogo collapsed={isCollapsed} />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="px-2">
           {navItems.map((item) =>
             item.subItems ? (
               <SidebarMenuItem key={item.label}>
                  <SidebarMenuButton 
-                    className="justify-start w-full"
+                    className="justify-start w-full px-2.5"
                     isActive={item.subItems.some(sub => pathname.startsWith(sub.href))}
                     tooltip={isCollapsed ? item.label : undefined}
                   >
@@ -71,7 +73,7 @@ function MainSidebar() {
                         <Link href={subItem.href} passHref legacyBehavior>
                             <SidebarMenuButton 
                             asChild
-                            className="justify-start w-full text-sm"
+                            className="justify-start w-full text-sm px-2.5"
                             isActive={pathname.startsWith(subItem.href)}
                             >
                             <a>
@@ -90,7 +92,7 @@ function MainSidebar() {
                 <Link href={item.href} passHref legacyBehavior>
                   <SidebarMenuButton 
                     asChild 
-                    className="justify-start w-full"
+                    className="justify-start w-full px-2.5"
                     isActive={pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))}
                     tooltip={isCollapsed ? item.label : undefined}
                   >
