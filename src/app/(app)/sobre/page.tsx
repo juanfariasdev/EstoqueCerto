@@ -23,6 +23,7 @@ export default function SobrePage() {
           <ul className="list-disc list-inside mt-4 space-y-2 text-muted-foreground">
             <li>Juan Pablo Farias</li>
             <li>Amanda Dias</li>
+            <li>Laura Evelyn Neves</li>
           </ul>
           <CardDescription className="mt-6 text-sm">
             Estoque Certo - Versão 1.0.0
